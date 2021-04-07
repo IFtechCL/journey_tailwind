@@ -1,13 +1,7 @@
-# Rails Kickoff – Tailwind
+# Journey - Tailwind CSS
 A rapid Rails 6 application template for personal use. This particular template utilizes [Tailwind CSS](https://tailwindcss.com/), a utility-first CSS framework for rapid UI development.
 
-Need version 5.2.3 support? [Check out this branch](https://github.com/justalever/kickoff_tailwind/tree/rails5-2)
-
 Tailwind depends on Webpack so this also comes bundled with [webpacker](https://github.com/rails/webpacker) support.
-
-Inspired heavily by [Jumpstart](https://github.com/excid3/jumpstart) from [Chris Oliver](https://twitter.com/excid3/). Credits to him for a bunch here.
-
-Be sure to also check out [Jumpstart Pro](https://jumpstartrails.com) to save loads of time creating your next Rails application. Chris, Jason, and I teamed up on it.
 
 ### Included gems
 
@@ -15,6 +9,7 @@ Be sure to also check out [Jumpstart Pro](https://jumpstartrails.com) to save lo
 - [friendly_id](https://github.com/norman/friendly_id)
 - [sidekiq](https://github.com/mperham/sidekiq)
 - [name_of_person](https://github.com/basecamp/name_of_person)
+- [omniauth-twitter](https://github.com/arunagw/omniauth-twitter)
 
 ### Tailwind CSS by default
 With Rails 6 we have webpacker by default now. Using PostCSS we can install Tailwind as a base CSS framework to harness. I prefer Tailwind due to it's un-opinionated approach.
@@ -28,7 +23,10 @@ When creating a new rails app simply pass the template file through.
 ```bash
 $ rails new sample_app -d <postgresql, mysql, sqlite3> -m template.rb
 ```
-
+### and finally
+```bash
+$ foreman start
+```
 ### Once installed what do I get?
 
 - Webpack support + Tailwind CSS configured in the `app/javascript` directory.
@@ -40,15 +38,4 @@ $ rails new sample_app -d <postgresql, mysql, sqlite3> -m template.rb
 - Git initialization out of the box
 - PurgeCSS configuration to help with CSS file sizes 
 - Custom defaults for button and form elements
-
-### Boot it up
-
-`$ rails server`
-
-### Boot it up (with foreman)
-Run `foreman start`. Head to `locahost:5000` to see your app. You'll have hot reloading on `js` and `css` and `scss/sass` files by default. Feel free to configure to look for more to compile reload as your app scales.
-
-
-### Watch an overview
-
- 📹 [https://youtu.be/kuKMRl8nj2w](https://youtu.be/kuKMRl8nj2w) - A bit dated now that Rails 6 is out now.
+- Omniauth with Twitter all views, model, controllers and shared are improved

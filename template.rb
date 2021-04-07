@@ -1,8 +1,10 @@
 =begin
-Template Name: Kickoff - Tailwind CSS
-Author: Andy Leverenz
-Author URI: https://web-crunch.com
+Template Name: Kickoff - Tailwind CSS, Template Renamed as: Journey - Tailwind CSS
+Author: Andy Leverenz <-- All credit to him.
+Edited by: Pablo Blanco
+Author URI: https://web-crunch.com, https://github.com/PabloB07
 Instructions: $ rails new myapp -d <postgresql, mysql, sqlite3> -m template.rb
+and finally: foreman start
 =end
 
 def source_paths
@@ -14,6 +16,9 @@ def add_gems
   gem 'friendly_id', '~> 5.4', '>= 5.4.1'
   gem 'sidekiq', '~> 6.1', '>= 6.1.2'
   gem 'name_of_person', '~> 1.1', '>= 1.1.1'
+  gem 'omniauth'
+  gem 'omniauth-twitter'
+  gem 'font-awesome-rails'
 end
 
 def add_users
@@ -23,6 +28,13 @@ def add_users
   # Configure Devise
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }",
               env: 'development'
+  initializer "devise.rb" do
+    "config.omniauth :twitter, Rails.application.credentials.fetch((:twitter_api_public), Rails.application.credentials.fetch(:twitter_api_secret)", :devise
+  end
+
+  insert_into_file "config/routes.rb",
+    "devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }\n",
+    after: "#{content}\n\n"
 
   route "root to: 'home#index'"
 
@@ -34,9 +46,6 @@ def add_users
     migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
-
-  # name_of_person gem
-  append_to_file("app/models/user.rb", "\nhas_person_name\n", after: "class User < ApplicationRecord")
 end
 
 def copy_templates
@@ -83,6 +92,14 @@ def add_friendly_id
   generate "friendly_id"
 end
 
+def add_omniauth
+  generate  "omniauth" && "omniauth-twitter"
+end
+
+def add_font_awesome
+  generate  "font-awesome-rails"
+end
+
 # Main setup
 source_paths
 
@@ -96,21 +113,28 @@ after_bundle do
   copy_templates
   add_tailwind
   add_friendly_id
+  add_omniauth
+  add_font_awesome
 
-  # Migrate
+  # Migrate & create a migration named add_omniauth_to_users
   rails_command "db:create"
+  rails_command "db:migrate"
+  rails_command "generate migration AddOmniauthToUsers provider:string uid:string"
   rails_command "db:migrate"
 
   git :init
   git add: "."
-  git commit: %Q{ -m "Initial commit" }
+  git commit: %Q{ -m "Initial commit :fire: " }
 
   say
-  say "Kickoff app successfully created! 👍", :green
+  say "Project successfully created, with this Template! 👍", :green
   say
   say "Switch to your app by running:"
   say "$ cd #{app_name}", :yellow
   say
-  say "Then run:"
+  say "2 Ways to run:", :yellow
   say "$ rails server", :green
+  say ""
+  say "(foreman run web, sidekiq, webpacker services)", :yellow
+  say "$ foreman start", :green
 end
